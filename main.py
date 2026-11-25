@@ -21,8 +21,8 @@ assistant = Client(
 )
 
 call_py = PyTgCalls(assistant)
+bot.call_py = call_py  # call_py ko bot ke saath attach kiya
 
-# Render Free Web Service ke liye dummy web server
 async def handle(request):
     return web.Response(text="Maurya Music Bot is Running!")
 
@@ -39,9 +39,11 @@ async def start_bot():
     print("🚀 Maurya Music Bot start ho raha hai...")
     await start_web_server()
     await bot.start()
+    print("✅ Main Bot online ho gaya!")
     await assistant.start()
+    print("✅ Assistant Account online ho gaya!")
     await call_py.start()
-    print("✅ Maurya Music Bot aur Assistant dono online hain!")
+    print("✅ PyTgCalls start ho gaya! Ab group me /play bhejein.")
     await idle()
     await bot.stop()
     await assistant.stop()
