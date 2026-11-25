@@ -1,5 +1,4 @@
-aiogram
-telethon
-py-tgcalls
-python-dotenv
-aiohttp
+aiogram>=3.13,<4
+aiohttp>=3.10,<4
+Telethon>=1.36,<2
+py-tgcalls>=2.2,<3
