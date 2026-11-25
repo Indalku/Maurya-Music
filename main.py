@@ -1,9 +1,10 @@
+import os
 import asyncio
+from aiohttp import web
 from pyrogram import Client, idle
 from pytgcalls import PyTgCalls
 from config import API_ID, API_HASH, BOT_TOKEN, STRING_SESSION
 
-# Main Bot Client
 bot = Client(
     "MauryaMusicBot",
     api_id=API_ID,
@@ -12,7 +13,6 @@ bot = Client(
     plugins=dict(root="handlers")
 )
 
-# Assistant Account Client (Jo Voice Chat join karega)
 assistant = Client(
     "MauryaAssistant",
     api_id=API_ID,
@@ -22,8 +22,22 @@ assistant = Client(
 
 call_py = PyTgCalls(assistant)
 
+# Render Free Web Service ke liye dummy web server
+async def handle(request):
+    return web.Response(text="Maurya Music Bot is Running!")
+
+async def start_web_server():
+    app = web.Application()
+    app.router.add_get("/", handle)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    port = int(os.environ.get("PORT", 8080))
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+
 async def start_bot():
     print("🚀 Maurya Music Bot start ho raha hai...")
+    await start_web_server()
     await bot.start()
     await assistant.start()
     await call_py.start()
